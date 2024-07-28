@@ -1,24 +1,26 @@
 import { definePlugin } from "@halo-dev/console-shared";
-import HomeView from "./views/HomeView.vue";
-import { IconPlug } from "@halo-dev/components";
 import { markRaw } from "vue";
+import SolarTransferHorizontalBoldDuotone from "~icons/solar/transfer-horizontal-bold-duotone";
+import "./styles/tailwind.css";
+import MigrateView from "./views/MigrateView.vue";
 
 export default definePlugin({
   components: {},
   routes: [
     {
-      parentName: "Root",
+      parentName: 'ToolsRoot',
       route: {
-        path: "/example",
-        name: "Example",
-        component: HomeView,
+        path: "/tools/comment-migrate",
+        name: 'CommentMigrate',
+        component: MigrateView,
         meta: {
-          title: "示例页面",
+          title: '评论迁移',
+          description: '支持多种平台的评论迁移插件',
           searchable: true,
+          permissions: ["plugin:comment:migrate:manage"],
           menu: {
-            name: "示例页面",
-            group: "示例分组",
-            icon: markRaw(IconPlug),
+            name: '评论迁移',
+            icon: markRaw(SolarTransferHorizontalBoldDuotone),
             priority: 0,
           },
         },
