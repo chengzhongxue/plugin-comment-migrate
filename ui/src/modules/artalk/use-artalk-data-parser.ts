@@ -46,8 +46,7 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
       } else {
         const commentName = findTopLevelId(items,item.id);
         const quoteReply = item.rid;
-        var a = createReply(item, refType,commentName as string,quoteReply as string)
-        comments.push();
+        comments.push(createReply(item, refType,commentName as string,quoteReply as string));
       }
     });
     return comments;
@@ -96,7 +95,7 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
         ipAddress: comment.ip,
         priority: 0,
         top: false,
-        allowNotification: true,
+        allowNotification: false,
         approved: true,
         approvedTime: new Date(created_at.substring(0, 19)).toISOString(),
         creationTime: new Date(created_at.substring(0, 19)).toISOString(),
@@ -144,7 +143,7 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
         ipAddress: reply.ip,
         priority: 0,
         top: false,
-        allowNotification: true,
+        allowNotification: false,
         approved: true,
         approvedTime: new Date(created_at.substring(0, 19)).toISOString(),
         creationTime: new Date(created_at.substring(0, 19)).toISOString(),
