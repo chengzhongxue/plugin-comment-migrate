@@ -97,7 +97,7 @@ export function useTwikooDataParser(file: File): useTwikooDataParserReturn {
     reply: Data,
     refType: "Post" | "SinglePage" | "Plugin",
   ): MigrateReply => {
-    return {
+    const migrateReply: MigrateReply = {
       refType: refType,
       kind: "Reply",
       apiVersion: "content.halo.run/v1alpha1",
@@ -125,14 +125,16 @@ export function useTwikooDataParser(file: File): useTwikooDataParserReturn {
         creationTime: new Date(reply.created).toISOString(),
         hidden: false,
         commentName: reply.rid == null ? "" : reply.rid,
-        quoteReply: reply.pid,
       },
       status:{}
     };
+    if (reply.pid === reply.rid || !reply.pid) {
+    } else {
+      migrateReply.spec.quoteReply = reply.pid;
+    }
+    return migrateReply;
   };
   
-  
-
   return {
     parse,
   };

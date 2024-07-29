@@ -53,11 +53,25 @@ export function useWalineDataParser(file: File): useWalineDataParserReturn {
     
     return comments;
   };
-  
+
+  function extractMomentId(url: string): string | "" {
+    // 找到最后一个斜杠的位置
+    const lastSlashIndex = url.lastIndexOf('/');
+    // 如果找不到斜杠，则返回 null
+    if (lastSlashIndex === -1) {
+      return "/";
+    }
+    // 使用 slice 方法截取字符串，从最后一个斜杠位置的下一个字符开始到末尾
+    const momentId = url.slice(lastSlashIndex + 1);
+    return momentId;
+  }
+
+
   const createComment = (
     comment: Comment,
     refType: "Post" | "SinglePage" | "Plugin" | "Moment",
   ): MigrateComment => {
+    const url = comment.url == null ? "/" : comment.url;
     return {
       refType: refType,
       kind: "Comment",
@@ -86,7 +100,7 @@ export function useWalineDataParser(file: File): useWalineDataParserReturn {
           kind: refType,
           group: refType == "Plugin" ? "plugin.halo.run" :  refType == "Moment" ? "moment.halo.run" : "content.halo.run",
           version: "v1alpha1",
-          name: refType == "Plugin" ? 'PluginLinks' : comment.url == null ? "/" : comment.url,
+          name: refType == "Plugin" ? 'PluginLinks' :  refType == "Moment" ? extractMomentId(url) : url,
         },
         lastReadTime: undefined,
       },
@@ -100,7 +114,7 @@ export function useWalineDataParser(file: File): useWalineDataParserReturn {
     reply: Comment,
     refType: "Post" | "SinglePage" | "Plugin" | "Moment",
   ): MigrateReply => {
-    return {
+    const migrateReply: MigrateReply = {
       refType: refType,
       kind: "Reply",
       apiVersion: "content.halo.run/v1alpha1",
@@ -128,14 +142,16 @@ export function useWalineDataParser(file: File): useWalineDataParserReturn {
         creationTime: new Date(reply.createdAt).toISOString(),
         hidden: false,
         commentName: reply.rid,
-        quoteReply: reply.pid,
       },
       status:{}
-    };
+    }
+    if (reply.pid === reply.rid || !reply.pid) {
+    } else {
+      migrateReply.spec.quoteReply = reply.pid;
+    }
+    return migrateReply;
   };
   
-  
-
   return {
     parse,
   };

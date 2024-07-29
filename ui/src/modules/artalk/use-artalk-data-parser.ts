@@ -46,7 +46,8 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
       } else {
         const commentName = findTopLevelId(items,item.id);
         const quoteReply = item.rid;
-        comments.push(createReply(item, refType,commentName as string,quoteReply as string));
+        var a = createReply(item, refType,commentName as string,quoteReply as string)
+        comments.push();
       }
     });
     return comments;
@@ -119,7 +120,7 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
     commentName: string,
     quoteReply: string,
   ): MigrateReply => {
-    return {
+    const migrateReply: MigrateReply = {
       refType: refType,
       kind: "Reply",
       apiVersion: "content.halo.run/v1alpha1",
@@ -147,14 +148,15 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
         creationTime: new Date(reply.created_at).toISOString(),
         hidden: false,
         commentName: commentName,
-        quoteReply: quoteReply == commentName ? "" : quoteReply,
       },
       status:{}
     };
+    if (quoteReply === commentName || !quoteReply) {
+    } else {
+      migrateReply.spec.quoteReply = quoteReply;
+    }
+    return migrateReply;
   };
-  
-  
-
   return {
     parse,
   };
