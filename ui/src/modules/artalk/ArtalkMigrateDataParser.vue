@@ -44,7 +44,7 @@ function openDocument() {
         >
           <li>在开始迁移前，建议先阅读关于 Artalk 迁移的文档。</li>
           <li>
-            目前仅支持根据 Artalk 导出的 JSON
+            目前仅支持根据 Artalk 导出的 artrans
             文件自动迁移数据。
           </li>
           <li>
@@ -60,7 +60,7 @@ function openDocument() {
       </template>
     </VAlert>
     <FileSelector
-      :options="{ accept: '.json', multiple: false }"
+      :options="{ accept: '.artrans', multiple: false }"
       @file-change="handleFileChange"
     ></FileSelector>
   </div>

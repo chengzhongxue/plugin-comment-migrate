@@ -76,6 +76,7 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
     comment: Data,
     refType: "Post" | "SinglePage" | "Plugin",
   ): MigrateComment => {
+    const created_at =  comment.created_at;
     return {
       refType: refType,
       kind: "Comment",
@@ -97,8 +98,8 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
         top: false,
         allowNotification: true,
         approved: true,
-        approvedTime: new Date(comment.created_at).toISOString(),
-        creationTime: new Date(comment.created_at).toISOString(),
+        approvedTime: new Date(created_at.substring(0, 19)).toISOString(),
+        creationTime: new Date(created_at.substring(0, 19)).toISOString(),
         hidden: false,
         subjectRef: {
           kind: refType,
@@ -120,6 +121,7 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
     commentName: string,
     quoteReply: string,
   ): MigrateReply => {
+    const created_at =  reply.created_at;
     const migrateReply: MigrateReply = {
       refType: refType,
       kind: "Reply",
@@ -144,8 +146,8 @@ export function useArtalkDataParser(file: File): useArtalkDataParserReturn {
         top: false,
         allowNotification: true,
         approved: true,
-        approvedTime: new Date(reply.created_at).toISOString(),
-        creationTime: new Date(reply.created_at).toISOString(),
+        approvedTime: new Date(created_at.substring(0, 19)).toISOString(),
+        creationTime: new Date(created_at.substring(0, 19)).toISOString(),
         hidden: false,
         commentName: commentName,
       },
