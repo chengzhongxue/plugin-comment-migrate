@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import run.halo.app.core.extension.User;
 import run.halo.app.core.extension.content.Comment;
 import run.halo.app.core.extension.content.Post;
 import run.halo.app.core.extension.content.SinglePage;
@@ -15,6 +16,8 @@ import run.halo.app.extension.controller.Controller;
 import run.halo.app.extension.controller.ControllerBuilder;
 import run.halo.app.extension.controller.Reconciler;
 import run.halo.app.extension.router.selector.FieldSelector;
+
+import java.util.List;
 
 import static run.halo.app.extension.ExtensionUtil.*;
 import static run.halo.app.extension.index.query.QueryFactory.equal;
@@ -32,7 +35,24 @@ public class MigarteCommentReconciler implements Reconciler<Reconciler.Request> 
                     return;
                 }
 
-                var subjectRef = comment.getSpec().getSubjectRef();
+                var spec = comment.getSpec();
+                var subjectRef = spec.getSubjectRef();
+
+
+                var listOptions = new ListOptions();
+                listOptions.setFieldSelector(FieldSelector.of(equal("spec.email",spec.getOwner().getName())));
+
+                List<User> users = client.listAll(User.class, listOptions, defaultSort());
+                if (!users.isEmpty()) {
+                    User user = users.get(0);
+                    String name = user.getMetadata().getName();
+                    String displayName = user.getSpec().getDisplayName();
+                    var commentOwner = new Comment.CommentOwner();
+                    commentOwner.setName(name);
+                    commentOwner.setDisplayName(displayName);
+                    commentOwner.setKind("User");
+                    spec.setOwner(commentOwner);
+                }
 
                 handleRatingComment(subjectRef);
 
@@ -58,14 +78,6 @@ public class MigarteCommentReconciler implements Reconciler<Reconciler.Request> 
                 .forEach(singlePage -> {
                     subjectRef.setName(singlePage.getMetadata().getName());
                 });
-        }
-
-        if (subjectRef.getKind().equals("Moment")) {
-            String originalString = subjectRef.getName();
-            int lastSlashIndex = originalString.lastIndexOf('/');
-            String extractedString = originalString.substring(lastSlashIndex + 1);
-            subjectRef.setName(extractedString);
-
         }
     }
 
