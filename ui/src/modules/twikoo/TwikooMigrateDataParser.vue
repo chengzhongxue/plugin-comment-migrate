@@ -3,6 +3,8 @@ import FileSelector from "@/components/FileSelector.vue";
 import type { MigrateData } from "@/types";
 import { VAlert, VButton } from "@halo-dev/components";
 import { useTwikooDataParser } from "./use-twikoo-data-parser";
+import type {Ref} from "vue";
+import {ref} from "vue";
 
 defineProps<{
   data: MigrateData;
@@ -12,6 +14,20 @@ const emit = defineEmits<{
   (event: "update:data", value: MigrateData): void;
 }>();
 
+/**
+ * `Init` -> `Parsing` -> `Configure` -> `Parsing` -> `Parsed`
+ */
+enum State {
+  Init,
+  Parsing,
+  Configure,
+  Parsed,
+}
+
+const state: Ref<State> = ref(State.Init);
+const errorMessage: Ref<string | null> = ref(null);
+const errorModal = ref(false);
+
 const handleFileChange = (files: FileList) => {
   const file = files.item(0);
   if (!file) {
@@ -20,10 +36,12 @@ const handleFileChange = (files: FileList) => {
   useTwikooDataParser(file)
     .parse()
     .then((data) => {
+      onErrorModalClose()
       emit("update:data", data);
     })
     .catch((error) => {
-      console.error(error);
+      setErrorState(error);
+      errorModal.value = true;
     });
 };
 
@@ -33,6 +51,20 @@ function openDocument() {
     "_blank"
   );
 }
+
+function setErrorState(e: unknown) {
+  state.value = State.Init;
+  if (e instanceof Error) {
+    errorMessage.value = e.message;
+  } else {
+    errorMessage.value = `${e}`;
+  }
+}
+
+const onErrorModalClose = () => {
+  errorMessage.value = null;
+  errorModal.value = false;
+};
 </script>
 
 <template>
@@ -43,6 +75,10 @@ function openDocument() {
           class="migrate-ml-2 migrate-list-inside migrate-list-disc migrate-space-y-1"
         >
           <li>在开始迁移前，建议先阅读关于 Twikoo 迁移的文档。</li>
+          <li>
+            导入前需要先关闭 <b>通知设置</b>，不然就会收到通知轰炸，前往
+            <b><a href="/console/settings?tab=notification">通知设置</a></b>
+          </li>
           <li>
             目前仅支持根据 Twikoo 导出的 JSON
             文件自动迁移数据。
@@ -59,6 +95,15 @@ function openDocument() {
         </VButton>
       </template>
     </VAlert>
+    <VAlert
+      v-if="errorModal"
+      class="sheet"
+      title="错误"
+      type="error"
+      :description="errorMessage"
+      @close="onErrorModalClose"
+    />
+
     <FileSelector
       :options="{ accept: '.json', multiple: false }"
       @file-change="handleFileChange"

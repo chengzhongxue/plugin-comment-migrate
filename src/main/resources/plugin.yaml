@@ -7,7 +7,7 @@ spec:
   requires: ">=2.17.0"
   author:
     name: 困困鱼
-    website:
+    website: https://github.com/chengzhongxue
   logo: logo.png
   homepage: https://github.com/chengzhongxue/plugin-comment-migrate#readme
   repo: https://github.com/chengzhongxue/plugin-comment-migrate
