@@ -105,7 +105,7 @@ export function useWalineDataParser(file: File): useWalineDataParserReturn {
         lastReadTime: undefined,
       },
       metadata: {
-        name: comment.objectId,
+        name: comment.objectId.toString(),
       },
     };
   };
@@ -119,7 +119,7 @@ export function useWalineDataParser(file: File): useWalineDataParserReturn {
       kind: "Reply",
       apiVersion: "content.halo.run/v1alpha1",
       metadata: {
-        name: reply.objectId,
+        name: reply.objectId.toString(),
       },
       spec: {
         raw: reply.comment,
@@ -141,13 +141,13 @@ export function useWalineDataParser(file: File): useWalineDataParserReturn {
         approvedTime: new Date(reply.createdAt).toISOString(),
         creationTime: new Date(reply.createdAt).toISOString(),
         hidden: false,
-        commentName: reply.rid,
+        commentName: reply.rid.toString(),
       },
       status:{}
     }
     if (reply.pid === reply.rid || !reply.pid) {
     } else {
-      migrateReply.spec.quoteReply = reply.pid;
+      migrateReply.spec.quoteReply = reply.pid.toString();
     }
     return migrateReply;
   };

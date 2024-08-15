@@ -6,12 +6,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 import run.halo.app.core.extension.User;
 import run.halo.app.core.extension.content.Comment;
-import run.halo.app.core.extension.content.Post;
-import run.halo.app.core.extension.content.SinglePage;
+import run.halo.app.core.extension.content.Reply;
 import run.halo.app.extension.DefaultExtensionMatcher;
 import run.halo.app.extension.ExtensionClient;
 import run.halo.app.extension.ListOptions;
-import run.halo.app.extension.Ref;
 import run.halo.app.extension.controller.Controller;
 import run.halo.app.extension.controller.ControllerBuilder;
 import run.halo.app.extension.controller.Reconciler;
@@ -24,20 +22,18 @@ import static run.halo.app.extension.index.query.QueryFactory.equal;
 
 @Component
 @RequiredArgsConstructor
-public class MigarteCommentReconciler implements Reconciler<Reconciler.Request> {
+public class MigarteReplyReconciler implements Reconciler<Reconciler.Request> {
     private final ExtensionClient client;
 
     @Override
     public Result reconcile(Request request) {
-        client.fetch(Comment.class, request.name())
-            .ifPresent(comment -> {
-                if (isDeleted(comment)) {
+        client.fetch(Reply.class, request.name())
+            .ifPresent(reply -> {
+                if (isDeleted(reply)) {
                     return;
                 }
 
-                var spec = comment.getSpec();
-                var subjectRef = spec.getSubjectRef();
-
+                var spec = reply.getSpec();
                 String kind = spec.getOwner().getKind();
                 if (kind.equals("Email")) {
                     var listOptions = new ListOptions();
@@ -48,50 +44,28 @@ public class MigarteCommentReconciler implements Reconciler<Reconciler.Request> 
                         User user = users.get(0);
                         String name = user.getMetadata().getName();
                         String displayName = user.getSpec().getDisplayName();
+
                         var commentOwner = new Comment.CommentOwner();
                         commentOwner.setName(name);
                         commentOwner.setDisplayName(displayName);
                         commentOwner.setKind("User");
                         spec.setOwner(commentOwner);
+                        client.update(reply);
                     }
                 }
-
-                handleRatingComment(subjectRef);
-
-                client.update(comment);
             });
         return new Result(false, null);
     }
 
 
-    private void handleRatingComment(Ref subjectRef) {
-
-        if (subjectRef.getKind().equals("Post")) {
-            client.listAll(Post.class, new ListOptions(),defaultSort())
-                .stream().filter(post -> subjectRef.getName().equals(post.getStatus().getPermalink()))
-                .forEach(post -> {
-                    subjectRef.setName(post.getMetadata().getName());
-                });
-        }
-
-        if (subjectRef.getKind().equals("SinglePage")) {
-            client.listAll(SinglePage.class,new ListOptions(),defaultSort())
-                .stream().filter(singlePage -> subjectRef.getName().equals(singlePage.getStatus().getPermalink()))
-                .forEach(singlePage -> {
-                    subjectRef.setName(singlePage.getMetadata().getName());
-                });
-        }
-    }
-
-
     @Override
     public Controller setupWith(ControllerBuilder builder) {
-        var extension = new Comment();
+        var extension = new Reply();
         return builder
             .extension(extension)
             .onAddMatcher(DefaultExtensionMatcher.builder(client, extension.groupVersionKind())
                 .fieldSelector(FieldSelector.of(
-                    equal(Comment.REQUIRE_SYNC_ON_STARTUP_INDEX_NAME, BooleanUtils.TRUE))
+                    equal(Reply.REQUIRE_SYNC_ON_STARTUP_INDEX_NAME, BooleanUtils.TRUE))
                 )
                 .build()
             )
