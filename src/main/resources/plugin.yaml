@@ -2,6 +2,8 @@ apiVersion: plugin.halo.run/v1alpha1
 kind: Plugin
 metadata:
   name: plugin-comment-migrate
+  annotations:
+    "store.halo.run/app-id": "app-sJxTQ"
 spec:
   enabled: true
   requires: ">=2.17.0"
@@ -9,7 +11,7 @@ spec:
     name: 困困鱼
     website: https://github.com/chengzhongxue
   logo: logo.webp
-  homepage: https://github.com/chengzhongxue/plugin-comment-migrate#readme
+  homepage: https://www.halo.run/store/apps/app-sJxTQ
   repo: https://github.com/chengzhongxue/plugin-comment-migrate
   issues: https://github.com/chengzhongxue/plugin-comment-migrate/issues
   displayName: "评论迁移"
