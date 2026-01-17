@@ -9,3 +9,5 @@ metadata:
     rbac.authorization.halo.run/display-name: "CommentMigrate"
     rbac.authorization.halo.run/ui-permissions: |
       ["plugin:comment:migrate:manage"]
+rules:
+  - nonResourceURLs: [ "*" ]
