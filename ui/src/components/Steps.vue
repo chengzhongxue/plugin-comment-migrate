@@ -35,19 +35,19 @@ const visibleItemsLength = computed(() => {
 
 const itemClass = (index: number) => {
   if (index > activeIndex.value) {
-    return ["migrate-text-gray-400"];
+    return [":uno: text-gray-400"];
   } else {
-    return ["migrate-text-black"];
+    return [":uno: text-black"];
   }
 };
 
 const borderClass = (index: number) => {
   if (index === activeIndex.value) {
-    return ["migrate-bg-blue-500", "migrate-text-white"];
+    return [":uno: bg-blue-500", ":uno: text-white"];
   } else if (index < activeIndex.value) {
-    return ["migrate-bg-[#e6f4ff]", "migrate-text-blue-600"];
+    return [":uno: bg-[#e6f4ff]", ":uno: text-blue-600"];
   } else {
-    return ["migrate-bg-black/10", "migrate-text-black/80"];
+    return [":uno: bg-black/10", ":uno: text-black/80"];
   }
 };
 
@@ -67,16 +67,16 @@ const handleNext = () => {
   <VCard v-if="visibleItemsLength > 0">
     <template #header>
       <ol
-        class="migrate-flex migrate-w-full migrate-items-center migrate-space-x-2 migrate-p-3 migrate-text-center migrate-text-sm migrate-font-medium sm:migrate-space-x-4 sm:migrate-p-4"
+        class=":uno: flex w-full items-center space-x-2 p-3 text-center text-sm font-medium sm:space-x-4 sm:p-4"
       >
         <li
           v-for="(item, index) in visibleItems"
           :key="index"
-          class="migrate-flex migrate-items-center"
+          class=":uno: flex items-center"
           :class="itemClass(index)"
         >
           <span
-            class="migrate-mr-2 migrate-flex migrate-h-7 migrate-w-7 migrate-shrink-0 migrate-items-center migrate-justify-center migrate-rounded-full migrate-text-xs"
+            class=":uno: mr-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs"
             :class="borderClass(index)"
           >
             <template v-if="index < activeIndex">
@@ -97,12 +97,12 @@ const handleNext = () => {
             <template v-else>{{ index + 1 }}</template>
           </span>
 
-          <span class="sm:migrate-ml-2 sm:migrate-inline-flex">
+          <span class=":uno: sm:ml-2 sm:inline-flex">
             {{ item.name }}
           </span>
           <svg
             v-if="index != visibleItemsLength - 1"
-            class="migrate-ml-2 migrate-h-3 migrate-w-3 sm:migrate-ml-4"
+            class=":uno: ml-2 h-3 w-3 sm:ml-4"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -119,9 +119,9 @@ const handleNext = () => {
         </li>
       </ol>
     </template>
-    <main class="migrate-flex migrate-min-h-[50vh] migrate-items-stretch">
+    <main class=":uno: flex min-h-[50vh] items-stretch">
       <div
-        class="migrate-relative migrate-flex-1"
+        class=":uno: relative flex-1"
         v-for="(item, index) in visibleItems"
         :key="index"
         v-show="index === activeIndex"

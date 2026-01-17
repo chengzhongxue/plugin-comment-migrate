@@ -158,10 +158,10 @@ onBeforeRouteLeave((to, from, next) => {
 <template>
   <VPageHeader title="评论迁移">
     <template #icon>
-      <SolarTransferHorizontalBoldDuotone class="mr-2 self-center" />
+      <SolarTransferHorizontalBoldDuotone class=":uno: mr-2 self-center" />
     </template>
   </VPageHeader>
-  <div class="migrate-m-4 migrate-flex migrate-flex-1 migrate-flex-col">
+  <div class=":uno: m-4 flex flex-1 flex-col">
     <Steps :items="stepItems" submitText="执行导入">
       <template #provider>
         <div>
@@ -172,7 +172,7 @@ onBeforeRouteLeave((to, from, next) => {
         </div>
       </template>
       <template #importData>
-        <div class="migrate-flex migrate-h-full migrate-flex-col">
+        <div class=":uno: flex h-full flex-col">
           <component
             :is="activeProvider?.importComponent"
             v-model:data="migrateData"
@@ -180,7 +180,7 @@ onBeforeRouteLeave((to, from, next) => {
         </div>
       </template>
       <template #migrate>
-        <div class="migrate-flex migrate-h-full migrate-w-1/2 migrate-flex-col">
+        <div class=":uno: flex h-full w-1/2 flex-col">
           <MigratePreview
             v-if="migrateData"
             :provider="activeProvider"

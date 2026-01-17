@@ -1,8 +1,7 @@
-import { definePlugin } from "@halo-dev/console-shared";
+import { definePlugin } from "@halo-dev/ui-shared";
 import { markRaw } from "vue";
+import "uno.css";
 import SolarTransferHorizontalBoldDuotone from "~icons/solar/transfer-horizontal-bold-duotone";
-import "./styles/tailwind.css";
-import MigrateView from "./views/MigrateView.vue";
 
 export default definePlugin({
   components: {},
@@ -12,7 +11,7 @@ export default definePlugin({
       route: {
         path: "/tools/comment-migrate",
         name: 'CommentMigrate',
-        component: MigrateView,
+        component: () => import('./views/MigrateView.vue'),
         meta: {
           title: '评论迁移',
           description: '支持多种平台的评论迁移插件',

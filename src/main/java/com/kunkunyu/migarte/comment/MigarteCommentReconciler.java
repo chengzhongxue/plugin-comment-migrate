@@ -20,7 +20,7 @@ import run.halo.app.extension.router.selector.FieldSelector;
 import java.util.List;
 
 import static run.halo.app.extension.ExtensionUtil.*;
-import static run.halo.app.extension.index.query.QueryFactory.equal;
+import static run.halo.app.extension.index.query.Queries.equal;
 
 @Component
 @RequiredArgsConstructor

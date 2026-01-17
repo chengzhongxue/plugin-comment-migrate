@@ -19,31 +19,31 @@ const handleSelectProvider = (provider: Provider) => {
 </script>
 <template>
   <ul
-    class="grid migrate-grid-cols-1 migrate-gap-4 md:migrate-grid-cols-2 xl:migrate-grid-cols-4"
+    class=":uno: grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4"
   >
     <li
       v-for="provider in providers"
       :key="provider.name"
       @click="handleSelectProvider(provider)"
-      class="migrate-flex migrate-cursor-pointer migrate-items-center migrate-rounded-lg migrate-p-4 migrate-ring-1 migrate-ring-gray-200 hover:migrate-bg-gray-100"
+      class=":uno: flex cursor-pointer items-center rounded-lg p-4 ring-1 ring-gray-200 hover:bg-gray-100"
       :class="{
-        '!migrate-bg-gray-100 !migrate-ring-indigo-400':
+        ':uno: !bg-gray-100 !ring-indigo-400':
           currentProvider?.name == provider.name,
       }"
     >
-      <div class="migrate-mr-4 migrate-size-12">
+      <div class=":uno: mr-4 size-12">
         <img
           :src="provider.icon"
           :alt="provider.name"
-          class="migrate-size-full"
+          class=":uno: size-full"
         />
       </div>
-      <div class="migrate-flex migrate-flex-col" :title="provider.description">
-        <span class="migrate-text migrate-line-clamp-1 migrate-font-semibold">
+      <div class=":uno: flex flex-col" :title="provider.description">
+        <span class=":uno: text line-clamp-1 font-semibold">
           {{ provider.name }}
         </span>
         <span
-          class="migrate-line-clamp-2 migrate-py-1 migrate-text-sm migrate-text-gray-500"
+          class=":uno: line-clamp-2 py-1 text-sm text-gray-500"
         >
           {{ provider.description }}
         </span>
