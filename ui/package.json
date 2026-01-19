@@ -27,7 +27,7 @@
     "axios": "^1.13.2",
     "es-toolkit": "^1.42.0",
     "fast-xml-parser": "^4.5.3",
-    "fastq": "^1.19.1",
+    "fastq": "1.17.1",
     "markdown-it": "^14.1.0",
     "performant-array-to-tree": "^1.11.0",
     "toml": "^3.0.0",
